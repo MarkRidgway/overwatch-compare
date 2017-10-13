@@ -1,0 +1,11 @@
+var path = require('path');
+
+module.exports = {
+  helloWorld(req, res){
+    res.json({ message: 'hello, world' });
+  },
+  show404(req, res){
+    res.status(404);
+    res.json({ error: '404: Path Not Found' });
+  }
+}
