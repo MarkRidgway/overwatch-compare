@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node server.js --use-strict",
+    "watch": "nodemon server.js --use-strict",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
