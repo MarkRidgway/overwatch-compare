@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js --use-strict",
-    "watch": "nodemon server.js --use-strict",
+    "watch": "DEBUG=true NODE_ENV=local nodemon --ignore 'public/' --use_strict server.js",
+    "dev": "DEBUG=true NODE_ENV=local nodemon --ignore 'sites/' --inspect -e js,json server.js --exec 'node'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -15,7 +16,9 @@
     "chai": "^4.1.2",
     "chalk": "^2.1.0",
     "express": "^4.16.2",
+    "express-status-monitor": "^1.0.1",
     "mocha": "^4.0.1",
-    "morgan": "^1.9.0"
+    "morgan": "^1.9.0",
+    "node-fetch": "^1.7.3"
   }
 }

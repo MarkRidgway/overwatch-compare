@@ -4,16 +4,23 @@ const bodyParser = require('body-parser');
 const port       = process.env.PORT || 8888;
 const express    = require('express');
 const errors     = require('./app/middleware/middleware.errors');
+const appRouter  = require('./app/routes/app-router.js');
+const apiRouter  = require('./app/routes/api-router.js');
 
 // configure
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Status
+app.use(require('express-status-monitor')());
+
 // Static Directory
 app.use(express.static('app/public'));
 
 // set routes
-app.use(require('./app/routes'));
+app.use("/api/", apiRouter);
+app.use(appRouter);
+
 
 // Error middleware
 app.use(errors.logErrors);

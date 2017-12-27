@@ -1,4 +1,4 @@
-const applog = require('../utilities/utility.app-logger');
+const applog = require('../utilities/app-logger');
 
 module.exports = {
   logErrors(error, req, res, next){
@@ -7,7 +7,15 @@ module.exports = {
     next(error);
   },
   sendErrors(error, req, res, next){
-    res.status(500);
-    res.json({ error: error.message });
+    if(req.status){
+      res.status(req.status);
+    }
+    else{
+      res.status(500);
+    }
+    res.json({
+      error: error.message,
+      stack: error.stack
+    });
   }
 }
