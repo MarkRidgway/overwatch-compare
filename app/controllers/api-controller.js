@@ -1,26 +1,29 @@
-const fetch = require("node-fetch");
-const applog = require('../utilities/app-logger');
-const apiURL = "https://slwp-owapi.herokuapp.com";
-const region = 'us';
+const fetch    = require("node-fetch");
+const applog   = require('../utilities/app-logger');
+const apiURL   = "https://slwp-owapi.herokuapp.com";
+const profile  = require('../models/profile');
+const region   = 'us'; // TODO Deal with region later
+const platform = 'pc'; // TODO Deal with platform later
 
 module.exports = {
   test(req, res, next){
     res.json({ message: 'oh hi mark' });
   },
-  getUserKills(req, res, next){
+  getProfile(req, res, next){
     var user = req.params.user;
-    var soloKills = 0;
 
-    fetch(`${apiURL}/stats/pc/${region}/${user}`)
-      .then(response => {
-        response.json().then(json => {
-          soloKills = parseSoloKills(json.stats.combat.quickplay);
-          res.json({ quickplay_solo_kills: soloKills });
-        });
-      })
-      .catch(error => {
-        console.log(error);
+    profile.getProfile(user, region, platform)
+    .then( (profile) =>{
+      res.json(profile);
+    })
+    .catch( (error) => {
+      res.json({
+        message: 'there was an error',
+        error: error
       });
+    })
+
+
   }
 }
 
