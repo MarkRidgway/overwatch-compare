@@ -1,0 +1,8 @@
+{
+  "mongo": {
+    "hostname": "<host>",
+    "database": "<database>",
+    "user": "<user>",
+    "pass": "<password>"
+  }
+}
