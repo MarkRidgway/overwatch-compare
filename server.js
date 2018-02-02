@@ -28,7 +28,6 @@ app.use(express.static('app/public'));
 app.use("/api/", apiRouter);
 app.use(appRouter);
 
-
 // Error middleware
 app.use(errors.logErrors);
 app.use(errors.sendErrors);

@@ -9,32 +9,24 @@ module.exports = {
   test(req, res, next){
     res.json({ message: 'oh hi mark' });
   },
-  getProfile(req, res, next){
-    var user = req.params.user;
+  async getProfile(req, res, next){
+    try{
+      var user = req.params.user;
 
-    profile.getProfile(user, region, platform)
-    .then( (profile) =>{
+      var profile = await profile.getProfile(user, region, platform);
+      
       res.json(profile);
-    })
-    .catch( (error) => {
-      res.json({
-        message: 'there was an error',
-        error: error
-      });
-    })
+    }
+    catch(error){ next(error); }
   },
-  getStats(req, res, next){
-    var user = req.params.user;
+  async getStats(req, res, next){
+    try{
+      var user = req.params.user;
 
-    profile.getStats(user, region, platform)
-    .then( (stats) =>{
-      res.json(stats);
-    })
-    .catch( (error) => {
-      res.json({
-        message: 'there was an error',
-        error: error
-      });
-    })
+      var stats = await profile.getStats(user, region, platform);
+      
+      res.json(profile);
+    }
+    catch(error){ next(error); }
   }
 }
