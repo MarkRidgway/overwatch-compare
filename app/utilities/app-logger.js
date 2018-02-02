@@ -2,7 +2,8 @@ const util = require('util');
 const chalk = require('chalk');
 const warn  = chalk.keyword('orange');
 const prefix = 'OVERWATCH-TEST';
-const debug = process.env.DEBUG
+const configLoader = require('../utilities/config-loader');
+const debug        = configLoader.getConfigVar('DEBUG');
 
 module.exports = {
   /**
