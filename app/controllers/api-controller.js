@@ -6,9 +6,21 @@ const region   = 'us'; // TODO Deal with region later
 const platform = 'pc'; // TODO Deal with platform later
 
 module.exports = {
+  /**
+   * Handles a request
+   * @param {Object} express request object
+   * @param {Object} express response object
+   * @param {Function} next express middle function
+   */
   test(req, res, next){
-    res.json({ message: 'oh hi mark' });
+    res.json({ message: "It's in the refrigerator"});
   },
+  /**
+   * Handles a request
+   * @param {Object} express request object
+   * @param {Object} express response object
+   * @param {Function} next express middle function
+   */
   async getProfile(req, res, next){
     try{
       var user = req.params.user;
@@ -19,6 +31,12 @@ module.exports = {
     }
     catch(error){ next(error); }
   },
+  /**
+   * Handles a request
+   * @param {Object} express request object
+   * @param {Object} express response object
+   * @param {Function} next express middle function
+   */
   async getStats(req, res, next){
     try{
       var user = req.params.user;
@@ -28,5 +46,15 @@ module.exports = {
       res.json(stats);
     }
     catch(error){ next(error); }
+  },
+  /**
+   * Handles a request
+   * @param {Object} express request object
+   * @param {Object} express response object
+   * @param {Function} next express middle function
+   */
+  handle404(req, res){
+    res.status(404);
+    res.json({ error: '404: Apologies, Life is pain, so is death.'});
   }
 }
