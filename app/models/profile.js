@@ -1,11 +1,10 @@
-const mongoose = require('mongoose');
-const Schema   = mongoose.Schema;
-const fetch    = require("node-fetch");
-const applog   = require('../utilities/app-logger');
-const apiURL   = "https://slwp-owapi.herokuapp.com";
-const config   = require('../../config/config.json');
-const mongocfg = config.mongo;
-const statExp  = 300000;    // Stat expiration date {{ default is 5 minutes }}
+const mongoose     = require('mongoose');
+const Schema       = mongoose.Schema;
+const fetch        = require("node-fetch");
+const applog       = require('../utilities/app-logger');
+const apiURL       = "https://slwp-owapi.herokuapp.com";
+const configLoader = require('../utilities/config-loader');
+const statExp      = 300000;    // Stat expiration date {{ default is 5 minutes }}
 
 mongoose.Promise = Promise;
 
@@ -181,13 +180,25 @@ function getDbProfile(user, region = 'us', platform = 'pc'){
 function dbConnect(){
   return new Promise( (resolve, reject) =>{
     if(mongoose.connection.readyState != 1){
+      // Get configuration
+      var mongocfg = configLoader.getConfigObject([
+        'DB_HOST', 'DB_NAME', 'DB_USER', 'DB_SECRET'
+      ]);
+
       // connect to our database
+      var auth = '';
 
-      // TODO Improve db connection
-      // mongoose.connect(`mongodb://${mongo.user}:${mongo.pass}@ds155631.mlab.com:55631/bearjs`);
+      if(mongocfg.DB_USER && mongocfg.DB_SECRET){
+        auth = `${mongocfg.DB_USER}:${mongocfg.DB_SECRET}@`;
+      }
 
-      // TODO better logging
-      mongoose.connect(`mongodb://${mongocfg.hostname}/${mongocfg.database}`)
+      var db = `${mongocfg.DB_HOST}/${mongocfg.DB_NAME}`;
+
+      var connection = `mongodb://${auth}${db}`;
+
+      applog.log(`Connecting to ${connection}`);
+
+      mongoose.connect(connection)
       .then( () => {
         resolve();
       })

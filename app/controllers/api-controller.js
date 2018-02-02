@@ -25,7 +25,7 @@ module.exports = {
 
       var stats = await profile.getStats(user, region, platform);
       
-      res.json(profile);
+      res.json(stats);
     }
     catch(error){ next(error); }
   }
