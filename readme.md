@@ -20,4 +20,4 @@ nodemon for watching
 
 ### Watching
 
-```npm run watch````
+```npm run watch```
