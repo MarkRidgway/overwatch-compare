@@ -35,5 +35,5 @@ app.use(errors.sendErrors);
 
 // start tje server
 app.listen(port, function(){
-  applog.appstart(`App listening on http://localhost:${port}`);
+  applog.appstart(`App listening at http://localhost:${port} on ${config.NODE_ENV}`);
 });
