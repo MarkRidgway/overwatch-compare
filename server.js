@@ -1,5 +1,4 @@
 const app          = require('express')();
-const morgan       = require('morgan');
 const bodyParser   = require('body-parser');
 const port         = process.env.PORT || 7676;
 const express      = require('express');
@@ -10,10 +9,14 @@ const applog       = require('./app/utilities/app-logger');
 const configLoader = require('./app/utilities/config-loader');
 const config       = configLoader.getConfigObject(['NODE_ENV']);
 
-// configure
-if(config.NODE_ENV == 'local'){
-  app.use('/api/', morgan('dev'));
-}
+(function(){
+  // configure
+  if(config.NODE_ENV != 'production'){
+    console.log('using morgan');
+    const morgan = require('morgan');
+    app.use('/api/', morgan('dev'));
+  }
+})();
 
 // Body parser
 app.use(bodyParser.urlencoded({ extended: true }));
