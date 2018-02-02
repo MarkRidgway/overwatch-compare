@@ -1,6 +1,6 @@
 const path    = require('path');
 const env     = require('node-env-file');
-const applogg = require('./app-logger');
+const applog = require('./app-logger');
 
 // Tracks if env file is loaded
 var envLoaded = false;
