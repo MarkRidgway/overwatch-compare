@@ -5,6 +5,7 @@ const applog   = require('../utilities/app-logger');
 const apiURL   = "https://slwp-owapi.herokuapp.com";
 const config   = require('../../config/config.json');
 const mongocfg = config.mongo;
+const statExp  = 300000;    // Stat expiration date {{ default is 5 minutes }}
 
 mongoose.Promise = Promise;
 
@@ -17,8 +18,24 @@ const ProfileSchema = new Schema({
 
 const Profile = mongoose.model('Profile', ProfileSchema);
 
-module.exports = {
-  getProfile
+module.exports = { getStats, getProfile };
+
+/**
+ * Gets the latest stats from a profile
+ * @param {String} user
+ * @param {String} region
+ * @param {String} platform
+ * @returns {Object} stats
+ */
+function getStats(user, region = 'us', platform = 'pc'){
+  return new Promise( async (resolve, reject) =>{
+    try{
+      var profile = await getProfile(user, region, platform);
+
+      resolve(profile.stats);
+    }
+    catch(error){ reject(error); }
+  });
 }
 
 /**
@@ -35,13 +52,37 @@ function getProfile(user, region = 'us', platform = 'pc'){
       await dbConnect();
       var profile = await getDbProfile(user, region, platform);
 
-      // TODO Check if stats need updating
+      // Check if stats exist
+      if(profile.statsHistory.length >= 1){
 
-      // Update stats from OW-API
-      profile = await updateProfile(profile);
+        // Sort stats
+        profile.statsHistory = profile.statsHistory.sort( (a, b) =>{
+          var aDate = new Date(a.date);
+          var bDate = new Date(b.date);
+          return  bDate - aDate;
+        });
+
+        // Check if latest stats are expired
+        latestStatDate = new Date(profile.statsHistory[0].date);
+        if((new Date() - statExp) > profile.statsHistory[0].date){
+          // Get updated stats from OW-API
+          profile = await updateProfile(profile);
+        }
+      }
+      else{
+        // Get stats from OW-API
+        profile = await updateProfile(profile);
+      }
+
+      var latestProfile = {
+        user: profile.user,
+        region: profile.region,
+        platform: profile.platform,
+        stats: JSON.parse(profile.statsHistory[0].stats)
+      };
 
       // Return profile
-      resolve(profile);
+      resolve(latestProfile);
     }
     catch(error){ reject(error); }
   });
@@ -124,6 +165,7 @@ function getDbProfile(user, region = 'us', platform = 'pc'){
         newProfile.user = user;
         newProfile.region = region;
         newProfile.platform = platform;
+        newProfile.statsHistory = [];
         resolve(newProfile);
       }
       else{
@@ -140,9 +182,12 @@ function dbConnect(){
   return new Promise( (resolve, reject) =>{
     if(mongoose.connection.readyState != 1){
       // connect to our database
+
+      // TODO Improve db connection
       // mongoose.connect(`mongodb://${mongo.user}:${mongo.pass}@ds155631.mlab.com:55631/bearjs`);
-      console.log('creating connection');
-      mongoose.connect(`mongodb://${mongocfg.hostname}/${mongocfg.database}`, { useMongoClient: true })
+
+      // TODO better logging
+      mongoose.connect(`mongodb://${mongocfg.hostname}/${mongocfg.database}`)
       .then( () => {
         resolve();
       })
