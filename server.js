@@ -1,18 +1,22 @@
-const app        = require('express')();
-const morgan     = require('morgan');
-const bodyParser = require('body-parser');
-const port       = process.env.PORT || 7676;
-const express    = require('express');
-const errors     = require('./app/middleware/middleware.errors');
-const appRouter  = require('./app/routes/app-router.js');
-const apiRouter  = require('./app/routes/api-router.js');
-const environment = process.env.NODE_ENV;
+const app          = require('express')();
+const morgan       = require('morgan');
+const bodyParser   = require('body-parser');
+const port         = process.env.PORT || 7676;
+const express      = require('express');
+const errors       = require('./app/middleware/middleware.errors');
+const appRouter    = require('./app/routes/app-router.js');
+const apiRouter    = require('./app/routes/api-router.js');
+const configLoader = require('./app/utilities/config-loader');
+const config       = configLoader.getConfigObject(['NODE_ENV']);
 
 // configure
-if(environment === 'local'){
-  app.use(morgan('dev'));
+if(config.NODE_ENV == 'local'){
+  app.use('/api/', morgan('dev'));
 }
+
+// Body parser
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json())
 
 // Status
 app.use(require('express-status-monitor')());
