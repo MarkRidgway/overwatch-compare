@@ -18,11 +18,13 @@ API that compares two players stats in fun and interesting ways.
 ### Running Server
 
 Will watch and refresh with nodemon
+
 ```npm run watch```
 
 ### Running Debugger
 
 Will watch and refresh with nodemon with debugger. See [this article](https://medium.com/@paul_irish/debugging-node-js-nightlies-with-chrome-devtools-7c4a1b95ae27) for more info.
+
 ```npm run dev```
 
 ### Local Configuration
@@ -36,8 +38,11 @@ Copy .env-example to .env. Database username and password are not required if ru
 ### Get User Profile
 
 **Note: the user requires the battle.net id. (ex YawgdirKram-1453). **
+
 ```api/user/:user```
 
 ### Get User Stats
+
 **Note: stats are cached in mongo for 5 minutes.**
+
 ```api/user/:user/stats```
