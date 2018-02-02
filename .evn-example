@@ -1,0 +1,6 @@
+NODE_ENV={environment}
+API_URL={url}
+DB_HOST={localhost:27017}
+DB_NAME={overwatch}
+DB_USER={user}
+DB_SECRET={passwor}
