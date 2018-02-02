@@ -6,6 +6,7 @@ const express      = require('express');
 const errors       = require('./app/middleware/middleware.errors');
 const appRouter    = require('./app/routes/app-router.js');
 const apiRouter    = require('./app/routes/api-router.js');
+const applog       = require('./app/utilities/app-logger');
 const configLoader = require('./app/utilities/config-loader');
 const config       = configLoader.getConfigObject(['NODE_ENV']);
 
@@ -34,5 +35,5 @@ app.use(errors.sendErrors);
 
 // start tje server
 app.listen(port, function(){
-  console.log(`App listening on http://localhost:${port}`);
+  applog.appstart(`App listening on http://localhost:${port}`);
 });

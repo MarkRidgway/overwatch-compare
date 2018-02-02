@@ -1,5 +1,6 @@
-const path = require('path');
-const env  = require('node-env-file');
+const path    = require('path');
+const env     = require('node-env-file');
+const applogg = require('./app-logger');
 
 // Tracks if env file is loaded
 var envLoaded = false;
@@ -42,11 +43,17 @@ function getConfigObject(configVars){
  * Loads the .env file in root if not already loaded
  */
 function loadEnvFile(){
-  if(!envLoaded){
-    // Load .env file into env
-    env(path.join(__dirname, '../../.env'));
+  try{
+    if(!envLoaded){
+      // Load .env file into env
+      env(path.join(__dirname, '../../.env'));
 
-    envLoaded = true;
+      envLoaded = true;
+    }
+  }
+  catch(error){
+    applog.log(error.message);
+    return;
   }
 
 }
