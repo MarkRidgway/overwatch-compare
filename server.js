@@ -1,14 +1,17 @@
 const app        = require('express')();
 const morgan     = require('morgan');
 const bodyParser = require('body-parser');
-const port       = process.env.PORT || 8888;
+const port       = process.env.PORT || 7676;
 const express    = require('express');
 const errors     = require('./app/middleware/middleware.errors');
 const appRouter  = require('./app/routes/app-router.js');
 const apiRouter  = require('./app/routes/api-router.js');
+const environment = process.env.NODE_ENV;
 
 // configure
-app.use(morgan('dev'));
+if(environment === 'local'){
+  app.use(morgan('dev'));
+}
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Status

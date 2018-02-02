@@ -22,24 +22,19 @@ module.exports = {
         error: error
       });
     })
+  },
+  getStats(req, res, next){
+    var user = req.params.user;
 
-
-  }
-}
-
-function parseSoloKills(_combatData){
-  var soloKills = 0;
-
-  _combatData.forEach( (data) =>{
-    if(data.title == 'Solo Kills'){
-      applog.obj({
-        msg: 'combat_data',
-        obj: data
+    profile.getStats(user, region, platform)
+    .then( (stats) =>{
+      res.json(stats);
+    })
+    .catch( (error) => {
+      res.json({
+        message: 'there was an error',
+        error: error
       });
-
-      soloKills = data.value;
-    }
-  });
-
-  return soloKills;
+    })
+  }
 }

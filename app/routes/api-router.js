@@ -5,5 +5,6 @@ var api     = require('../controllers/api-controller');
 module.exports = router;
 
 // API Routes ==================================================================
-router.get('/test',   api.test);
-router.get('/:user/', api.getProfile);
+router.get('/test',        api.test);
+router.get('/:user/',      api.getProfile);
+router.get('/:user/stats', api.getStats);
