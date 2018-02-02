@@ -62,8 +62,8 @@ function getProfile(user, region = 'us', platform = 'pc'){
         });
 
         // Check if latest stats are expired
-        latestStatDate = new Date(profile.statsHistory[0].date);
-        if((new Date() - statExp) > profile.statsHistory[0].date){
+        var latestStatDate = new Date(profile.statsHistory[0].date);
+        if((new Date() - statExp) > latestStatDate){
           // Get updated stats from OW-API
           profile = await updateProfile(profile);
         }
