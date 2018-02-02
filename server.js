@@ -25,9 +25,6 @@ app.use(bodyParser.json())
 // Status
 app.use(require('express-status-monitor')());
 
-// Static Directory
-app.use(express.static('app/public'));
-
 // set routes
 app.use("/api/", apiRouter);
 app.use(appRouter);
